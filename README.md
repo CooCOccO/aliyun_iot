@@ -11,13 +11,13 @@ AliyunIot gem 可以帮助开发者方便地在Rails环境中使用[阿里云物
 使用 `gem install`
 
 ```
-gem install "wechat"
+gem install "aliyun_iot"
 ```
 
 或者添加下面这行到 `Gemfile`:
 
 ```
-gem 'wechat'
+gem 'aliyun_iot'
 ```
 
 运行下面这行代码来安装:
