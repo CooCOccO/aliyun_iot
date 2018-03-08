@@ -22,7 +22,7 @@ module AliyunIot
 
     def initialize(name, subscription_name = nil)
       @name = name
-      @subscription_name = subscription_name unless subscription_name.nil?
+      @subscription_name = subscription_name
     end
 
     #创建topic

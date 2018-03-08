@@ -9,8 +9,8 @@ module AliyunIot
     delegate :product_key, to: :configuration
 
     class << self
-      def [](name, pk = nil)
-        Queue.new(name, pk)
+      def [](name)
+        Queue.new(name)
       end
 
       def queues(opts = {})
@@ -21,9 +21,9 @@ module AliyunIot
       end
     end
 
-    def initialize(name, pk)
+    def initialize(name)
       @name = name
-      @pk = pk || product_key
+      @pk = product_key
     end
 
     #创建队列

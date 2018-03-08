@@ -1,43 +1,100 @@
-# AliyunIot
+AliyunIot
+======
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/aliyun_iot`. To experiment with that code, run `bin/console` for an interactive prompt.
+AliyunIot gem 可以帮助开发者方便地在Rails环境中使用[阿里云物联网套件](https://help.aliyun.com/product/30520.html)提供的服务，包括
 
-TODO: Delete this and the text above, and describe your gem
+- [服务器端API](https://help.aliyun.com/document_detail/30557.html)
+- [消息服务](https://help.aliyun.com/product/27412.html)
 
-## Installation
+## 安装
 
-Add this line to your application's Gemfile:
+使用 `gem install`
 
-```ruby
-gem 'aliyun_iot'
+```
+gem install "wechat"
 ```
 
-And then execute:
+或者添加下面这行到 `Gemfile`:
 
-    $ bundle
+```
+gem 'wechat'
+```
 
-Or install it yourself as:
+运行下面这行代码来安装:
 
-    $ gem install aliyun_iot
+```console
+bundle install
+```
 
-## Usage
+运行下面这行代码来生成配置文件:
 
-TODO: Write usage instructions here
+```console
+rails g aliyun_iot:install
+```
 
-## Development
+## 配置
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+#### Rails 全局配置
+Rails应用程序中，需要将配置文件放在`config/aliyun_iot.yml`，可以为不同environment创建不同的配置。
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+公众号配置示例：
 
-## Contributing
+```
+development:
+   access_key_id:       access_key_id
+   access_key_secret:   access_key_secret
+   end_point:           http(s)://{AccountId}.mns.cn-shanghai.aliyuncs.com
+   product_key:         product_key
+   base_url:            iot.cn-shanghai.aliyuncs.com
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/aliyun_iot. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+production:
+   access_key_id:       access_key_id
+   access_key_secret:   access_key_secret
+   end_point:           http(s)://{AccountId}.mns.cn-shanghai.aliyuncs.com
+   product_key:         product_key
+   base_url:            iot.cn-shanghai.aliyuncs.com
+```
 
-## License
+## 命令
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+#### Queue
 
-## Code of Conduct
+```ruby
+  AliyunIot::Queue.queues                                                ## 列出所有队列
+  AliyunIot::Queue[QueueName].receive_message(WaitSeconds)               ## 消费消息
+  AliyunIot::Queue[QueueName].create({DelaySeconds, MaximumMessageSize, MessageRetentionPeriod, VisibilityTimeout, PollingWaitSeconds, LoggingEnabled})                                   ## 创建队列
+  AliyunIot::Queue[QueueName].delete                                     ## 删除队列
+  AliyunIot::Queue[QueueName].send_message({MessageBody, DelaySeconds, Priority})  ## 发送消息
+```
 
-Everyone interacting in the AliyunIot project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/aliyun_iot/blob/master/CODE_OF_CONDUCT.md).
+#### Topic
+
+```ruby
+  AliyunIot::Topic.topics                                                ## 列出所有主题
+  AliyunIot::Topic[TopicName].create({MaximumMessageSize, LoggingEnabled}) ## 创建主题
+  AliyunIot::Topic[TopicName].delete                                     ## 删除主题
+  AliyunIot::Topic[TopicName].get_topic_attributes                       ## 获取主题属性
+  AliyunIot::Topic[TopicName].subscribe({Endpoint, FilterTag, NotifyStrategy, NotifyContentFormat}) ## 订阅主题
+  AliyunMns::Topic[TopicName, SubscriptionName].unsubscribe              ## 取消订阅
+```
+
+#### Product
+
+```ruby
+  AliyunIot::Product.create(Name)                                        ## 创建产品
+  AliyunIot::Product.check_regist_state(ApplyId)                         ## 批量查询注册状态
+  AliyunIot::Product.list_regist_info(ApplyId, PageSize, CurrentPage)    ## 批量查询注册状态
+  AliyunIot::Product[ProductKey].update({ProductName, ProductDesc})      ## 修改产品信息
+  AliyunIot::Product[ProductKey].list({PageSize, CurrentPage})           ## 查询产品的设备列表
+  AliyunIot::Product[ProductKey].regist_device({DeviceName})             ## 设备注册
+  AliyunIot::Product[ProductKey].regist_devices({DeviceName.1, DeviceName.2 ....})    ## 批量注册设备
+  AliyunIot::Product[ProductKey].pub({TopicFullName, MessageContent})    ## 发布消息到设备
+  AliyunIot::Product[ProductKey].rrpc({DeviceName, RequestBase64Byte, Timeout}) ## 发消息给设备并同步返回响应
+```
+
+#### Message
+
+由 AliyunIot::Queue[QueueName].receive_message 接口获取的消息，在消费后需要及时删除
+```ruby
+  AliyunIot::Queue[QueueName].receive_message(3).delete
+```
