@@ -37,9 +37,7 @@ rails g aliyun_iot:install
 #### Rails 全局配置
 Rails应用程序中，需要将配置文件放在`config/aliyun_iot.yml`，可以为不同environment创建不同的配置。
 
-公众号配置示例：
-
-```
+```yml
 development:
    access_key_id:       access_key_id
    access_key_secret:   access_key_secret
