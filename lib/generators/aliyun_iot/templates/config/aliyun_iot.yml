@@ -1,0 +1,13 @@
+development:
+   access_key_id:       
+   access_key_secret:   
+   end_point:           
+   product_key:         
+   base_url:            
+
+production:
+   access_key_id:       
+   access_key_secret:   
+   end_point:           
+   product_key:         
+   base_url:            
