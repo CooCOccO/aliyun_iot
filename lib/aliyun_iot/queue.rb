@@ -40,6 +40,12 @@ module AliyunIot
       end
     end
 
+    #查看消息
+    def peek
+      request_opts = {mqs_headers: {"x-mns-version" => "2015-06-06"}, query: {peekonly: true}}
+      Request::Xml.get(messages_path, request_opts)
+    end
+
     #删除队列
     def delete
       Request::Xml.delete(queue_path, mqs_headers: {"x-mns-version" => "2015-06-06"})
