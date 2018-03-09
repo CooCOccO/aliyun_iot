@@ -73,7 +73,8 @@ production:
   AliyunIot::Topic[TopicName].delete                                     ## 删除主题
   AliyunIot::Topic[TopicName].get_topic_attributes                       ## 获取主题属性
   AliyunIot::Topic[TopicName].subscribe({Endpoint, FilterTag, NotifyStrategy, NotifyContentFormat}) ## 订阅主题
-  AliyunMns::Topic[TopicName, SubscriptionName].unsubscribe              ## 取消订阅
+  AliyunIot::Topic[TopicName, SubscriptionName].unsubscribe              ## 取消订阅
+  AliyunIot::Topic[TopicName].publish_message({MessageBody, MessageTag, MessageAttributes}) ## 向指定主题发布消息
 ```
 
 #### Product
