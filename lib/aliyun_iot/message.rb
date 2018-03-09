@@ -20,13 +20,15 @@ module AliyunIot
     #删除消息
     def delete
       check_receipt_handle
-      Request::Xml.delete(queue.messages_path, end_point, params: {:ReceiptHandle => receipt_handle})
+      data = set_data {ReceiptHandle: receipt_handle}
+      Request::Xml.delete(queue.messages_path, data)
     end
 
     #修改消息可见时间
     def change_visibility(seconds)
       check_receipt_handle
-      Request::Xml.put(queue.messages_path, end_point, params: {:ReceiptHandle => receipt_handle, :VisibilityTimeout => seconds})
+      data = set_data {ReceiptHandle: receipt_handle, VisibilityTimeout: seconds}
+      Request::Xml.put(queue.messages_path, data)
     end
 
     def get_data
@@ -54,6 +56,11 @@ module AliyunIot
     end
 
     private
+
+    def set_data(query)
+      {mqs_headers: {"x-mns-version" => "2015-06-06"}, query: query}
+    end
+
     def check_receipt_handle
       raise "No receipt handle for this operation" unless receipt_handle
     end
