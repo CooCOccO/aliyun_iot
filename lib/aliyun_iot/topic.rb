@@ -15,7 +15,7 @@ module AliyunIot
       def topics(opts = {})
         mqs_options = {query: "x-mns-prefix", offset: "x-mns-marker", size: "x-mns-ret-number"}
         mqs_headers = opts.slice(*mqs_options.keys).reduce({}) { |mqs_headers, item| k, v = *item; mqs_headers.merge!(mqs_options[k] => v) }
-        response = Request::Xml.get("/topics", mqs_headers: mqs_headers.merge({"x-mns-version" => "2015-06-06"}))
+        response = Request::Xml.get("/topics", mqs_headers: mqs_headers)
         Hash.xml_array(response, "Topics", "Topic").collect { |item| Topic.new(URI(item["TopicURL"]).path.sub!(/^\/topics\//, "")) }
       end
     end
@@ -27,7 +27,7 @@ module AliyunIot
 
     #创建topic
     def create(opts={})
-      Request::Xml.put(topic_path, mqs_headers: {"x-mns-version" => "2015-06-06"}) do |request|
+      Request::Xml.put(topic_path) do |request|
         msg_options = {
             MaximumMessageSize: 65536
         }.merge(opts)
@@ -37,12 +37,12 @@ module AliyunIot
 
     # 删除topic
     def delete
-      Request::Xml.delete(topic_path, mqs_headers: {"x-mns-version" => "2015-06-06"})
+      Request::Xml.delete(topic_path)
     end
 
     # 获取topic属性
     def get_topic_attributes
-      topic_hash = Hash.from_xml(Request::Xml.get(topic_path, mqs_headers: {"x-mns-version" => "2015-06-06"}))
+      topic_hash = Hash.from_xml(Request::Xml.get(topic_path))
       {
           topic_name: topic_hash["Topic"]["TopicName"],
           create_time: topic_hash["Topic"]["CreateTime"],
@@ -60,7 +60,7 @@ module AliyunIot
       if opts[:Endpoint].nil? || opts[:Endpoint].blank?
         raise Request::XmlException.new(Exception.new("subscribe parameters invalid"))
       else
-        Request::Xml.put(subscribe_path, mqs_headers: {"x-mns-version" => "2015-06-06"}) do |request|
+        Request::Xml.put(subscribe_path) do |request|
           request.content(:Subscription, opts)
         end
       end
@@ -68,7 +68,7 @@ module AliyunIot
 
     #退订topic
     def unsubscribe
-      Request::Xml.delete(subscribe_path, mqs_headers: {"x-mns-version" => "2015-06-06"})
+      Request::Xml.delete(subscribe_path)
     end
 
     #发布消息
@@ -76,7 +76,7 @@ module AliyunIot
       if opts[:MessageBody].nil? || opts[:MessageBody].blank?
         raise Exception.new("publish message parameters invalid")
       else
-        Request::Xml.post(message_path, mqs_headers: {"x-mns-version" => "2015-06-06"}) do |request|
+        Request::Xml.post(message_path) do |request|
           request.content(:Message, opts)
         end
       end
