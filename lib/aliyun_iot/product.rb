@@ -51,6 +51,10 @@ module AliyunIot
     def regist_devices(params = {})
       execute params, 'ApplyDeviceWithNames'
     end
+    
+    def device_state(params = {})
+      execute params, 'GetDeviceStatus'
+    end
 
     def pub(params = {})
       raise RequestException.new(Exception.new("message MessageContent is empty!")) if params[:MessageContent].nil?
