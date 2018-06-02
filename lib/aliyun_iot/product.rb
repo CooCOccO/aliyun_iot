@@ -52,8 +52,8 @@ module AliyunIot
       execute params, 'ApplyDeviceWithNames'
     end
     
-    def device_state(params = {})
-      execute params, 'GetDeviceStatus'
+    def batch_get_device_state(params = {})
+      execute params, 'BatchGetDeviceState'
     end
 
     def pub(params = {})
