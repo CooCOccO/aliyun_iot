@@ -9,6 +9,7 @@ require "aliyun_iot/queue"
 require "aliyun_iot/topic"
 require "aliyun_iot/message"
 require "aliyun_iot/product"
+require "aliyun_iot/result"
 
 class Hash
   def self.xml_array content, *path
