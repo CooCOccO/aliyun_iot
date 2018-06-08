@@ -60,6 +60,7 @@ production:
 ```ruby
   AliyunIot::Queue.queues                                                ## 列出所有队列
   AliyunIot::Queue[QueueName].receive_message(WaitSeconds)               ## 消费消息
+  AliyunIot::Queue[QueueName].batch_receive_message(MessageCount, WaitSeconds)  ## 批量消费消息
   AliyunIot::Queue[QueueName].peek                                       ## 查看消息
   AliyunIot::Queue[QueueName].create({DelaySeconds, MaximumMessageSize, MessageRetentionPeriod, VisibilityTimeout, PollingWaitSeconds, LoggingEnabled})                                   ## 创建队列
   AliyunIot::Queue[QueueName].delete                                     ## 删除队列
@@ -82,7 +83,8 @@ production:
 
 ```ruby
   AliyunIot::Product.create(Name)                                        ## 创建产品
-  AliyunIot::Product.check_regist_state(ApplyId)                         ## 批量查询注册状态
+  AliyunIot::Product.batch_get_device_state({DeviceName.1, DeviceName.2 ....})   ## 批量查询设备状态
+  AliyunIot::Product.check_regist_state(ApplyId)                         ## 查询注册状态
   AliyunIot::Product.list_regist_info(ApplyId, PageSize, CurrentPage)    ## 批量查询注册状态
   AliyunIot::Product[ProductKey].update({ProductName, ProductDesc})      ## 修改产品信息
   AliyunIot::Product[ProductKey].list({PageSize, CurrentPage})           ## 查询产品的设备列表

@@ -36,7 +36,7 @@ module AliyunIot
             :MessageRetentionPeriod => 345600,
             :PollingWaitSeconds => 0
         }.merge(opts)
-        request.content_xml(:Queue, msg_options)
+        request.content(:Queue, msg_options)
       end
     end
 
@@ -57,7 +57,7 @@ module AliyunIot
             :DelaySeconds => 0,
             :Priority => 8
         }.merge(opts)
-        request.content_xml(:Message, msg_options.merge(:MessageBody => message.to_s))
+        request.content(:Message, msg_options.merge(:MessageBody => message.to_s))
       end
     end
 
@@ -65,7 +65,21 @@ module AliyunIot
     def receive_message(wait_seconds = 3)
       result = Request::Xml.get(messages_path, query: {waitseconds: wait_seconds})
       return nil if result.nil?
-      Message.new(self, result)
+      Result.new(self, result).get_message
+    end
+    
+    #批量消费消息
+    def batch_receive_message(num = 16, wait_seconds = 3)
+      result = Request::Xml.get(messages_path, query: {waitseconds: wait_seconds, numOfMessages: num})
+      return nil if result.nil?
+      Result.new(self, result, "Messages", "Message").get_message
+    end
+    
+    #设置队列属性
+    def set_attr(opts = {})
+      Request::Xml.put(queue_path, query: {Metaoverride: true}) do |request|
+        request.content(:Queue, opts)
+      end
     end
 
     def queue_path
