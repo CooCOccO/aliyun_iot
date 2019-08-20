@@ -60,6 +60,7 @@ production:
 ```ruby
   AliyunIot::Queue.queues                                                ## 列出所有队列
   AliyunIot::Queue[QueueName].receive_message(WaitSeconds)               ## 消费消息
+  AliyunIot::Queue[QueueName].batch_receive_message(MessageCount, WaitSeconds)  ## 批量消费消息
   AliyunIot::Queue[QueueName].peek                                       ## 查看消息
   AliyunIot::Queue[QueueName].create({DelaySeconds, MaximumMessageSize, MessageRetentionPeriod, VisibilityTimeout, PollingWaitSeconds, LoggingEnabled})                                   ## 创建队列
   AliyunIot::Queue[QueueName].delete                                     ## 删除队列

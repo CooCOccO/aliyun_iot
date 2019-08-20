@@ -1,20 +1,12 @@
 require "aliyun_iot/request/xml"
 module AliyunIot
   class Message
-    attr_reader :queue, :id, :body_md5, :body, :receipt_handle, :enqueue_at, :first_enqueue_at, :next_visible_at, :dequeue_count, :priority
+    attr_reader :h, :queue, :id, :body_md5, :body, :receipt_handle, :enqueue_at, :first_enqueue_at, :next_visible_at, :dequeue_count, :priority
 
-    def initialize(queue, content)
-      h = Hash.xml_object(content, "Message")
+    def initialize(queue, h)
+      @h = h
       @queue = queue
-      @id = h["MessageId"]
-      @body_md5 = h["MessageBodyMD5"]
-      @body = h["MessageBody"]
-      @enqueue_at = Time.at(h["EnqueueTime"].to_i/1000.0)
-      @first_enqueue_at = Time.at(h["FirstDequeueTime"].to_i/1000.0)
-      @dequeue_count = h["DequeueCount"].to_i
-      @priority = h["Priority"].to_i
-      @receipt_handle = h["ReceiptHandle"]
-      @next_visible_at = Time.at(h["NextVisibleTime"].to_i/1000.0)
+      set_message_info
     end
 
     #删除消息
@@ -56,6 +48,18 @@ module AliyunIot
     end
 
     private
+    
+    def set_message_info
+      @id = h["MessageId"]
+      @body_md5 = h["MessageBodyMD5"]
+      @body = h["MessageBody"]
+      @enqueue_at = Time.at(h["EnqueueTime"].to_i/1000.0)
+      @first_enqueue_at = Time.at(h["FirstDequeueTime"].to_i/1000.0)
+      @dequeue_count = h["DequeueCount"].to_i
+      @priority = h["Priority"].to_i
+      @receipt_handle = h["ReceiptHandle"]
+      @next_visible_at = Time.at(h["NextVisibleTime"].to_i/1000.0)      
+    end
 
     def set_data(query)
       {mqs_headers: {"x-mns-version" => "2015-06-06"}, query: query}

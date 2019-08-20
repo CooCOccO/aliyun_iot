@@ -73,13 +73,15 @@ module AliyunIot
     def query_batch_register_status(apply_id)
       execute({ApplyId: apply_id}, 'QueryBatchRegisterDeviceStatus')
     end
+    
+    def batch_get_device_state(params = {})
+      execute params, 'BatchGetDeviceState'
+    end
 
     def pub(params = {})
       raise ParamsError, "message MessageContent is empty!" if params[:MessageContent].nil?
-      default_params = { Qos: '0' }
-      default_params.merge!({ Qos: '0' }) if params[:Qos].nil?
-      params[:MessageContent] = Base64.urlsafe_encode64(params[:MessageContent]).chomp
-      execute params.merge(default_params), 'Pub'
+      params[:MessageContent] = Base64.encode64(params[:MessageContent]).chomp
+      execute params, 'Pub'
     end
 
     def sub(params = {})
