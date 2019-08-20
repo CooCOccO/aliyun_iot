@@ -53,6 +53,10 @@ module AliyunIot
       execute params, 'RegisterDevice'
     end
 
+    def query_device_detail_by_name(device_name)
+      execute({DeviceName: device_name}, 'QueryDeviceDetail')
+    end
+
     def regist_devices(params = {})
       warn "WARNING: Product#regist_devices is deprecated. Please, use Product#batch_check_device_names instead"
       batch_check_device_names params
