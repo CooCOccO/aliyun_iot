@@ -68,6 +68,20 @@ module AliyunIot
       Message.new(self, result)
     end
 
+    #批量消费消息
+    def batch_receive_message(num = 16, wait_seconds = 3)
+      result = Request::Xml.get(messages_path, query: {waitseconds: wait_seconds, numOfMessages: num})
+      return nil if result.nil?
+      Result.new(self, result, "Messages", "Message").get_message
+    end
+
+    #设置队列属性
+    def set_attr(opts = {})
+      Request::Xml.put(queue_path, query: {Metaoverride: true}) do |request|
+        request.content(:Queue, opts)
+      end
+    end
+
     def queue_path
       "/queues/#{name}"
     end

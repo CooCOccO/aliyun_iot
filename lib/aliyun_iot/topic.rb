@@ -58,7 +58,7 @@ module AliyunIot
     #订阅topic
     def subscribe(opts = {})
       if opts[:Endpoint].nil? || opts[:Endpoint].blank?
-        raise Request::XmlException.new(Exception.new("subscribe parameters invalid"))
+        raise ParamsError, "subscribe parameters invalid"
       else
         Request::Xml.put(subscribe_path) do |request|
           request.content(:Subscription, opts)
@@ -74,7 +74,7 @@ module AliyunIot
     #发布消息
     def publish_message(opts = {})
       if opts[:MessageBody].nil? || opts[:MessageBody].blank?
-        raise Exception.new("publish message parameters invalid")
+        raise ParamsError, "publish message parameters invalid"
       else
         Request::Xml.post(message_path) do |request|
           request.content(:Message, opts)

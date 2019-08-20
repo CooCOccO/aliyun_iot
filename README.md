@@ -3,7 +3,7 @@ AliyunIot
 
 AliyunIot gem 可以帮助开发者方便地在Rails环境中使用[阿里云物联网套件](https://help.aliyun.com/product/30520.html)提供的服务，包括
 
-- [服务器端API](https://help.aliyun.com/document_detail/30557.html)
+- [服务器端API](https://help.aliyun.com/document_detail/69893.html)
 - [消息服务](https://help.aliyun.com/product/27412.html)
 
 ## 安装
@@ -82,12 +82,13 @@ production:
 
 ```ruby
   AliyunIot::Product.create(Name)                                        ## 创建产品
-  AliyunIot::Product.check_regist_state(ApplyId)                         ## 批量查询注册状态
-  AliyunIot::Product.list_regist_info(ApplyId, PageSize, CurrentPage)    ## 批量查询注册状态
   AliyunIot::Product[ProductKey].update({ProductName, ProductDesc})      ## 修改产品信息
   AliyunIot::Product[ProductKey].list({PageSize, CurrentPage})           ## 查询产品的设备列表
   AliyunIot::Product[ProductKey].regist_device({DeviceName})             ## 设备注册
-  AliyunIot::Product[ProductKey].regist_devices({DeviceName.1, DeviceName.2 ....})    ## 批量注册设备
+  AliyunIot::Product[ProductKey].batch_check_device_names({DeviceName.1: 'ppp', DeviceName.2: 'abc'})    ## 批量注册的设备的名称
+  AliyunIot::Product[ProductKey].query_batch_register_status(apply_id) #查看名称设置结果
+  AliyunIot::Product[ProductKey].batch_register_device_with_apply_id(apply_id) #批量注册设备
+  AliyunIot::Product.query_page_by_apply_id(ApplyId, PageSize, CurrentPage)    ## 查看批量注册的设备信息
   AliyunIot::Product[ProductKey].pub({TopicFullName, MessageContent})    ## 发布消息到设备
   AliyunIot::Product[ProductKey].rrpc({DeviceName, RequestBase64Byte, Timeout}) ## 发消息给设备并同步返回响应
 ```

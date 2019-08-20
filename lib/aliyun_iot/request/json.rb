@@ -28,7 +28,7 @@ module AliyunIot
         ts = Time.now.utc.strftime('%FT%TZ')
         base_params = {
             Format: 'JSON',
-            Version: '2017-04-20',
+            Version: '2018-01-20',
             AccessKeyId: access_key_id,
             SignatureMethod: 'HMAC-SHA1',
             Timestamp: ts,

@@ -23,6 +23,11 @@ module AliyunIot
       end
 
       def list_regist_info(apply_id, page_size, current_page)
+        warn "WARNING: Product.list_regist_info is deprecated. Please, use Product.query_page_by_apply_id instead"
+        query_page_by_apply_id(apply_id, page_size, current_page)
+      end
+
+      def query_page_by_apply_id(apply_id, page_size, current_page)
         params = { ApplyId: apply_id, PageSize: page_size, CurrentPage: current_page }
         execute params, 'QueryPageByApplyId'
       end
@@ -45,15 +50,28 @@ module AliyunIot
     end
 
     def regist_device(params = {})
-      execute params, 'RegistDevice'
+      execute params, 'RegisterDevice'
     end
 
     def regist_devices(params = {})
-      execute params, 'ApplyDeviceWithNames'
+      warn "WARNING: Product#regist_devices is deprecated. Please, use Product#batch_check_device_names instead"
+      batch_check_device_names params
+    end
+
+    def batch_check_device_names(params = {})
+      execute params, 'BatchCheckDeviceNames'
+    end
+
+    def batch_register_device_with_apply_id(apply_id)
+      execute({ApplyId: apply_id}, 'BatchRegisterDeviceWithApplyId')
+    end
+
+    def query_batch_register_status(apply_id)
+      execute({ApplyId: apply_id}, 'QueryBatchRegisterDeviceStatus')
     end
 
     def pub(params = {})
-      raise RequestException.new(Exception.new("message MessageContent is empty!")) if params[:MessageContent].nil?
+      raise ParamsError, "message MessageContent is empty!" if params[:MessageContent].nil?
       default_params = { Qos: '0' }
       default_params.merge!({ Qos: '0' }) if params[:Qos].nil?
       params[:MessageContent] = Base64.urlsafe_encode64(params[:MessageContent]).chomp
