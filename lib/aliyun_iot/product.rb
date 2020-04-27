@@ -12,8 +12,8 @@ module AliyunIot
         Product.new(key)
       end
 
-      def create(name)
-        params = { Name: name }
+      def create(name, opt = {})
+        params = opt.merge({ Name: name })
         execute params, 'CreateProduct'
       end
 
