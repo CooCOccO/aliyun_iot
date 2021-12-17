@@ -53,6 +53,10 @@ module AliyunIot
       execute params, 'RegisterDevice'
     end
 
+    def delete_device(params = {})
+      execute params, 'DeleteDevice'
+    end
+
     def query_device_detail_by_name(device_name)
       execute({DeviceName: device_name}, 'QueryDeviceDetail')
     end
@@ -73,7 +77,7 @@ module AliyunIot
     def query_batch_register_status(apply_id)
       execute({ApplyId: apply_id}, 'QueryBatchRegisterDeviceStatus')
     end
-    
+
     def batch_get_device_state(params = {})
       execute params, 'BatchGetDeviceState'
     end
